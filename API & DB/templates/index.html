@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED Control</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .container, .log-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .led-control {
+            margin: 20px 0;
+        }
+        button {
+            width: 100px;
+            height: 50px;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .red-button { background-color: #ff4c4c; }
+        .green-button { background-color: #32cd32; }
+        .blue-button { background-color: #0051ff; ; }
+        
+        /* 테이블을 화면 가운데 정렬 */
+        .log-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          margin-top: 20px;
+      }
+ /* 제목에 여백 추가 */
+         /* .log-container h2 {
+            margin-bottom: 10px; /* 제목과 테이블 사이 여백 *
+           } */
+        table { 
+            width: 60%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed; /* 테이블 너비 고정 */
+
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+         /* timestamp 열의 너비 지정 */
+         th.color, td.color { width: 20%; }
+        th.action, td.action { width: 20%; }
+        th.timestamp, td.timestamp { width: 60%; }
+      
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LED Control</h1>
+
+        <div class="led-control">
+            <h2>Red LED</h2>
+            <button class="red-button" onclick="controlLED('red', 'on')">Red ON</button>
+            <button class="red-button" onclick="controlLED('red', 'off')">Red OFF</button>
+        </div>
+
+        <div class="led-control">
+            <h2>Green LED</h2>
+            <button class="green-button" onclick="controlLED('green', 'on')">Green ON</button>
+            <button class="green-button" onclick="controlLED('green', 'off')">Green OFF</button>
+        </div>
+
+        <div class="led-control">
+            <h2>Blue LED</h2>
+            <button class="blue-button" onclick="controlLED('blue', 'on')">Blue ON</button>
+            <button class="blue-button" onclick="controlLED('blue', 'off')">Blue OFF</button>
+        </div>
+    </div>
+
+    <div class="log-container">
+        <h2>LED Action Log</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Color</th>
+                    <th>Action</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody id="log-table">
+                <!-- 로그가 여기에 추가됩니다 -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function controlLED(color, action) {
+            fetch('/led', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `color=${color}&action=${action}`
+            }).then(response => {
+                if (response.ok) {
+                    console.log(`${color} LED ${action} command sent`);
+                    loadLEDLog(); // LED 로그를 갱신합니다
+                } else {
+                    console.log("Failed to send command");
+                }
+            });
+        }
+
+        function loadLEDLog() {
+            fetch('/led_log')
+                .then(response => response.json())
+                .then(logs => {
+                    const logTable = document.getElementById("log-table");
+                    logTable.innerHTML = ""; // 기존 로그 초기화
+
+                    logs.forEach(log => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                        <td class="color">${log[0]}</td>
+                        <td class="action">${log[1]}</td>
+                        <td class="timestamp">${log[2]}</td>  <!-- 변환 없이 그대로 사용 -->
+                        `;
+                        logTable.appendChild(row);
+                    });
+                });
+        }
+
+        // 페이지 로드 시 로그 데이터를 불러옵니다.
+        window.onload = loadLEDLog;
+    </script>
+</body>
+</html>

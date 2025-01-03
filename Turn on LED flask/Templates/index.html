@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LED Control</title>
+  </head>
+  <body>
+    <h1>LED Control</h1>
+    <button onclick="controlLED('on')">LED ON</button>
+    <button onclick="controlLED('off')">LED OFF</button>
+    <br><br>
+    <a href="/viewDatas">view datas</a>
+
+    <script>
+      function controlLED(status) {
+        fetch("/insertData", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `status=${status}`,
+        }).then((response) => {
+          if (response.ok) {
+            console.log(`${status} command sent`);
+          } else {
+            console.log("Failed to send command");
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
