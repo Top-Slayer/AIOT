@@ -7,6 +7,7 @@ void setup() {
     pinMode(GREEN_LED_PIN, OUTPUT); // 노란색 LED ຕັ້ງ pin ເປັນຮູບແບບການອອກ
     pinMode(BLUE_LED_PIN, OUTPUT);  // 초록색 LED ຕັ້ງ pin ເປັນຮູບແບບການອອກ
     Serial.begin(9600);              // Start Serial communition
+    
 }
 
 void loop() {
