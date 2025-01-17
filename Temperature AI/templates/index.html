@@ -1,1 +1,28 @@
-html here
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIoT Sensor Data</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>AIoT Sensor Data</h1>
+    <table border="1">
+        <tr>
+            <th>Timestamp</th>
+            <th>Temperature (Â°C)</th>
+            <th>Humidity (%)</th>
+            <th>Anomaly</th>
+        </tr>
+        {% for row in data %}
+        <tr class="{% if row[4] == 1 %}anomaly-row-red{% else %}anomaly-row-white{% endif %}">
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ "Yes" if row[4] == 1 else "No" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

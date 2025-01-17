@@ -1,0 +1,25 @@
+.anomaly-row-red {
+    background-color: red;
+}
+.anomaly-row-white {
+    background-color: white;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid black;
+}
+th {
+    background-color: #f4f4f4;
+}
+@media (max-width: 600px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
