@@ -1,6 +1,7 @@
 from keras.models import load_model
 from PIL import Image, ImageOps
 import numpy as np
+import io
 from tabulate import tabulate
 
 model = load_model("model/keras_model.h5", compile=False)
@@ -8,9 +9,9 @@ class_names = [line.strip() for line in open("model/labels.txt", "r").readlines(
 
 np.set_printoptions(suppress=True)
 
-def recognize(path, debug=False) -> np.ndarray:
+def recognize(img_bytes, debug=False) -> np.ndarray:
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-    image = Image.open(path).convert("RGB")
+    image = Image.open(io.BytesIO(img_bytes)).convert("RGB")
 
     size = (224, 224)
     image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
@@ -33,4 +34,4 @@ def recognize(path, debug=False) -> np.ndarray:
     
     index = np.argmax(predicted)
 
-    return np.array([class_names[index][2:], predicted[0][index]])
+    return np.array([class_names[index][2:], round(predicted[0][index] * 100, 2)])
