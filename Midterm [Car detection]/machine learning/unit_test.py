@@ -35,4 +35,3 @@ def _test_CORS() -> any:
 
 testProcess("Test POST: ", _test_imagePost())
 testProcess("CORS test: ", _test_CORS())
-testProcess("Add new dep in requiement: ", subprocess.run(["poetry", "run", "pip", "freeze", ">", "requirement.txt"]))
