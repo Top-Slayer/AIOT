@@ -22,7 +22,7 @@ def _test_imagePost() -> any:
 
     return requests.post("http://127.0.0.1:5000/analyse-img", json=payload)
 
-
+ 
 def _test_getDatas() -> any:
     return requests.get("http://127.0.0.1:5000/getAllDatas")
 
