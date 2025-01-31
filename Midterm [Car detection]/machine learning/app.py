@@ -28,7 +28,7 @@ try:
 except Exception as e:
     arduino = None
 
-print(f"-> Arduino Port: {arduino}")
+print(f"-> Arduino Port: {arduino.port}")
 
 
 def interactToServo(status):
@@ -101,8 +101,15 @@ def changeStatus():
     interactToServo(True)
     storeDatas("Undefined")
 
-    return jsonify({"message": "sucessful"}), 200
+    return jsonify({"barrier-status": barrier_status}), 200
 
+# Query data from database
+@app.route("/getAllData", methods=["GET"])
+def getAllData():
+    cur = conn.cursor()
+    cur.execute( "SELECT IsEnter FROM CarStatus WHERE Title = (?) ORDER BY ID DESC LIMIT 1",)
+    enter_status = cur.fetchall()
+    return 
 
 if __name__ == "__main__":
     app.run()
