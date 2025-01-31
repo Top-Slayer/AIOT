@@ -1,11 +1,17 @@
 import base64
 import requests
 import subprocess
+import sys
+import json
 
+output = True if len(sys.argv) > 1 and sys.argv[1] == "-o" else False
 
-def testProcess(name: str, res: any):
+def testProcess(name: str, res: requests):
     print(name, end="")
-    print("...OK" if res else "...Failed")
+    print("... OK" if res.status_code == 200 else "... Failed")
+    if output:
+        print("Output: ")
+        print(json.dumps(json.loads(res.content.decode("utf-8")), indent=4), end="\n\n")
 
 
 def _test_imagePost() -> any:
@@ -17,21 +23,13 @@ def _test_imagePost() -> any:
     return requests.post("http://127.0.0.1:5000/analyse-img", json=payload)
 
 
-def _test_CORS() -> any:
-    return subprocess.run(
-        [
-            "curl",
-            "-H",
-            "Origin: http://something.com",
-            "-X",
-            "POST",
-            "http://127.0.0.1:5000/change-status",
-            "-v",
-        ],
-        capture_output=True,
-        text=True,
-    ).stdout
+def _test_getDatas() -> any:
+    return requests.get("http://127.0.0.1:5000/getAllDatas")
 
 
-testProcess("Test POST: ", _test_imagePost())
-testProcess("CORS test: ", _test_CORS())
+testProcess("POST image into API path: ", _test_imagePost())
+testProcess("Get data from database test: ", _test_getDatas())
+
+print("Adding new dependencies ... ", end='')
+subprocess.run(["poetry", "run", "pip", "freeze", ">", "requirement.txt"]),
+print("Success")
