@@ -73,7 +73,7 @@ def analyseImg():
     data = request.get_json()
 
     if "image" not in data:
-        return jsonify({"error": "Invalid json payload"}), 400
+        return jsonify({"error": "Invalid json payload"}),400
 
     object = do.recognize(base64.b64decode(data["image"]))
 
@@ -91,7 +91,6 @@ def analyseImg():
         ),
         200,
     )
-
 
 # Change status of barrier instanctly
 @app.route("/change-status", methods=["POST"])
