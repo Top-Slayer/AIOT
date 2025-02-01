@@ -1,0 +1,10 @@
+.camera-video {
+    position: relative;
+    margin-top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); 
+  }

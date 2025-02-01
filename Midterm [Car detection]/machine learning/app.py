@@ -30,7 +30,6 @@ except Exception as e:
 
 print(f"-> Arduino Port: {arduino}")
 
-
 def interactToServo(status):
     global barrier_status
 
