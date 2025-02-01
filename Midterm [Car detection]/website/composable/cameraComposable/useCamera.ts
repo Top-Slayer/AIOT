@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { sendCameraData, changeBarrierStatus} from "~/service/UseCamera/cameraService";
+import { sendCameraData} from "~/service/UseCamera/cameraService";
 import './style.css'
 
 export const useCamera = () => {
@@ -9,10 +9,12 @@ export const useCamera = () => {
   const errorMessage = ref<string | null>(null);
   const servoStatus = ref<boolean>(false);
 
-  console.log("Camera Image: ", cameraImage);
-  
+  console.log("Camera start: ", cameraImage);
+
   // function open camera
   const startCamera = async () => {
+    console.log("Start camera");
+    
     try {
       isLoading.value = true;
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -27,18 +29,11 @@ export const useCamera = () => {
       video.classList.add("camera-video");
       document.body.appendChild(video);
       
-      // Open Servo
-      await changeBarrierStatus();
-      servoStatus.value = true;
-
-      takePhoto();
-
-      setTimeout(async () => {
-        if (cameraImage.value.length > 0) {
-          await sendCameraData(cameraImage.value);  
-          cameraImage.value = [];
-        }
-      }, 1000);
+      const photInterval = setInterval(async() =>{
+        await takePhoto();
+      }, 3000);
+      
+      (window as any).photInterval = photInterval;
     } catch (error) {
       errorMessage.value = (error as Error).message;
     } finally {
@@ -48,6 +43,8 @@ export const useCamera = () => {
 
   // function stop camera
   const stopCamera = async () => {
+    console.log("Stop camera");
+    
     if (cameraStream.value) {
       cameraStream.value.getTracks().forEach((track) => track.stop);
       cameraStream.value = null;
@@ -57,25 +54,9 @@ export const useCamera = () => {
     if (video) {
       video.remove();
     }
-    try {
-      await changeBarrierStatus();
-      servoStatus.value = false;
 
-    } catch (error) {
-      errorMessage.value = (error as Error).message;
-    }
+    clearInterval((window as any).photInterval);
   };
-
-  // function post status sevo 
-  const changeStatusServo = async () => {
-    try {
-      await changeBarrierStatus();
-      servoStatus.value != servoStatus.value;
-    }
-    catch (error) {
-      errorMessage.value = (error as Error).message;
-    }
-  }
 
   // function take photo
   const takePhoto = async () => {
@@ -91,8 +72,8 @@ export const useCamera = () => {
 
       canvas.toBlob(async (blob) => {
         if (blob) {
-          // const base64String = await convertBlobToBase64(blob);  
           cameraImage.value.push(blob);
+          await sendCameraData([blob]);
         }
       }, "image/jpeg");
     }
@@ -104,7 +85,6 @@ export const useCamera = () => {
     errorMessage,
     startCamera,
     stopCamera,
-    changeStatusServo,
     servoStatus
   };
 };

@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import  carService from '~/composable/carComposable/useTables';
+
+const { infoCar, isLoading, errorMessage, } = carService();
 
 </script>
 
 <template>
-  <div class="mt-24">
+  <div class="mt-10">
     <div class="relative overflow-x-auto">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -21,15 +24,17 @@
         </thead>
 
         <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-          
-            <!-- v-Loop v-for loop ຂໍ້ມູນແລ້ວສະແດງຜົນໄດ້ເລີຍ -->
-
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="(itemCar, index) in infoCar" :key="index">
             <th>
-               lorem
+              {{ itemCar.id }}
             </th>
+            
             <td class="px-6 py-4">
+              {{ itemCar.title }}
+            </td>
 
+            <td>
+              {{ itemCar.time }}
             </td>
 
           </tr>
@@ -39,6 +44,4 @@
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,33 +1,19 @@
 <script setup lang="ts">
 import { useCamera } from '~/composable/cameraComposable/useCamera';
-import { ref, onMounted } from 'vue';
-
 const {
   isLoading,
   errorMessage,
-  servoStatus,
+  // servoStatus,
   startCamera,
   stopCamera,
-  changeStatusServo,
+  // changeStatusServo,
 } = useCamera();
-
-// video stream
-const video = ref<HTMLVideoElement | null>(null);
-
-onMounted(() => {
-  navigator.mediaDevices
-    .getUserMedia({ video: true })
-    .then((stream) => {
-      if (video.value) video.value.srcObject = stream;
-    })
-    .catch((err) => console.error("Error accessing camera:", err));
-});
 
 </script>
 
 <template>
   <div class="mx-auto">
-    <h1 class="mt-10 font-bold text-2xl text-gray-900 text-center">Camera-contor</h1>
+    <h1 class="mt-5 font-bold text-lg text-gray-900 text-center">Camera-Control</h1>
 
     <div v-if="isLoading">Loading camera...</div>
 
@@ -44,19 +30,14 @@ onMounted(() => {
         class="px-2 py-3 border-4 border-rose-600 bg-rose-500 rounded-lg font-bold text-white ">Stop camera</button>
 
       <!-- button status -->
-      <button @click="changeStatusServo" class="px-2 py-2 border-4 rounded-lg font-bold text-white"
+      <!-- <button @click="changeStatusServo" class="px-2 py-2 border-4 rounded-lg font-bold text-white"
         :class="servoStatus ? 'border-green-600 bg-green-500' : 'border-blue-900 bg-blue-800'">
         {{ servoStatus ? "OPEN" : "CLOSE" }}
-      </button>
+      </button> -->
     </div>
-
-    <!-- <div>
-      <video ref="video" autoplay></video>
-    </div> -->
   </div>
 </template>
 
 <style scoped></style>
 
 
-<!-- ມາເຮັດຕໍ່ໃນສ່ວນຂອງຕາຕະລາງ -->

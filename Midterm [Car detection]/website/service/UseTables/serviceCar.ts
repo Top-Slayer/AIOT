@@ -1,6 +1,7 @@
 import type { carType } from "~/types/carTable/carType";
 import { useFetch } from "#app";
-const API_Car = "lorem lorem";
+const API_Car = "http://localhost:5000/getAllDatas";
+// const API_Car = "http://localhost:5000/getAllDatas?limit=10&offset=0";
 
 // function fetch Data car 
 export const fetchDataCar = async (): Promise<carType[]> => {
