@@ -1,32 +1,46 @@
-export const sendCameraData = async (cameraImage:Array<Blob>) => {
-    try {
-      const formData = new FormData();
-      console.log("Form data: ", formData);
+const API_Camera = "http://localhost:5000/analyse-img";
 
-        cameraImage.forEach((blob, index) => {
-            formData.append("image" + index, blob);
-        });
+// Convert Blob to Base64
+export const convertBlobToBase64 = (blob: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      const base64String = reader.result?.toString().split(",")[1]; 
+      resolve(base64String || "");
+    };
+    reader.onerror = (error) => reject(error);
+  });
+};
 
-    const response = await fetch(`http://localhost:5000/analyse-img`,{
+// Send image data to API
+export const sendCameraData = async (cameraImage: Blob[]) => {
+  console.log("Send camera");
+  
+  try {
+    const base64Images = await Promise.all(
+      cameraImage.map((blob) => convertBlobToBase64(blob))
+    );
+
+    console.log("Base 64", base64Images);
+    
+    // Send the first image 
+    const response = await fetch(`${API_Camera}`, {
       method: "POST",
-      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ image: base64Images[0] }), 
+      
     });
-    return response;
-  } catch (errormessage) {
+
+    const responseData = await response.json();
+    console.log("Response Data: ", responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error("Message error Image: ", error);
     throw new Error("Failed to add image!!!");
   }
 };
 
-//  function change Barrier Status
-export const changeBarrierStatus = async () => {
-  try {
-    const response = await fetch(`http://localhost:5000/change-status`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
-    return response;
-   
-  } catch (error) {
-    throw new Error("Failed to change barrier status");
-  }
-};

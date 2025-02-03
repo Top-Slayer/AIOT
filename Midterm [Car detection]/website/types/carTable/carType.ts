@@ -1,6 +1,5 @@
 export interface carType {
     id: number,
-    nameCar: string,
-    firstDate: string,
-    lastDate: string    
+    title: string,
+    time: string,
 }

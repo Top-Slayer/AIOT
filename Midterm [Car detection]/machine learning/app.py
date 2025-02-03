@@ -9,7 +9,6 @@ CORS(app)
 
 barrier_status = False
 object = []
-
 # Initial databse and base table
 path = "./datas.db"
 if not os.path.exists(path):
@@ -33,7 +32,6 @@ except Exception as e:
 
 print(f"-> Arduino Port: {arduino}")
 
-
 def interactToServo(status):
     global barrier_status
 
@@ -52,7 +50,6 @@ def storeDatas(title: str):
         VALUES(?,?)",
         (title, _dateset),
     )
-
     conn.commit()
 
 
@@ -82,17 +79,6 @@ def analyseImg():
         ),
         200,
     )
-
-
-# Change status of barrier instanctly
-# @app.route("/change-status", methods=["POST"])
-# def changeStatus():
-#     global object
-
-#     interactToServo(True)
-
-#     return jsonify({"barrier-status": barrier_status}), 200
-
 
 # Query data from database
 @app.route("/getAllDatas", methods=["GET"])
