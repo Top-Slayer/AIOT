@@ -52,11 +52,11 @@ def storeDatas(title: str):
     )
     conn.commit()
 
-
 # Analyse object and decide open barrier
 @app.route("/analyse-img", methods=["POST"])
 def analyseImg():
     global object
+
 
     data = request.get_json()
 
