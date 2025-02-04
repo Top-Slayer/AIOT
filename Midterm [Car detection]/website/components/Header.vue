@@ -3,7 +3,7 @@ import { NuxtLink } from '#components';
 </script>
 
 <template>
-    <div class="mt-16">
+    <div class="mt-10">
         <ul class="mx-auto mr-16 flex space-x-2 justify-end">
             <NuxtLink to="/">
                 <li class="font-bold text-lg px-2 text-gray-900">Camera</li>

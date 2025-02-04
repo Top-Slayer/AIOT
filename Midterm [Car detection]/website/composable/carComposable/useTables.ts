@@ -1,6 +1,6 @@
 import { fetchDataCar } from "~/service/UseTables/serviceCar";
 import type { carType } from "~/types/carTable/carType";
-import { ref } from "vue";
+import { ref , onMounted} from "vue";
 
 const carService = () => {
   const infoCar = ref<carType[]>([]);
@@ -23,6 +23,7 @@ const carService = () => {
   if (error.value) {
     errorMessage.value = error.value.message;
   }
+  onMounted(fetchDataCar);
 
   return {
     infoCar,
