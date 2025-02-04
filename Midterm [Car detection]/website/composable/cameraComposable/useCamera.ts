@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { sendCameraData} from "~/service/UseCamera/cameraService";
 import './style.css'
 
@@ -7,7 +7,6 @@ export const useCamera = () => {
   const cameraImage = ref<Blob[]>([]);
   const isLoading = ref(false);
   const errorMessage = ref<string | null>(null);
-  const servoStatus = ref<boolean>(false);
 
   console.log("Camera start: ", cameraImage);
 
@@ -72,14 +71,16 @@ export const useCamera = () => {
 
       canvas.toBlob(async (blob) => {
         if (blob) {
-          cameraImage.value.push(blob);
+          cameraImage.value = [...cameraImage.value, blob];
           await sendCameraData([blob]);
         }
       }, "image/jpeg");
     }
   };
 
-
+  watchEffect(() => {
+    console.log("New Image Captured:", cameraImage.value);
+  });
   return {
     cameraImage,
     isLoading,

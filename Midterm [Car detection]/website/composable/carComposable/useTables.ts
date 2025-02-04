@@ -1,6 +1,6 @@
 import { fetchDataCar } from "~/service/UseTables/serviceCar";
 import type { carType } from "~/types/carTable/carType";
-import { ref , onMounted} from "vue";
+import { ref , watchEffect} from "vue";
 
 const carService = () => {
   const infoCar = ref<carType[]>([]);
@@ -14,16 +14,15 @@ const carService = () => {
       return await fetchDataCar();
     }
   );
-  if (data.value) {
-    infoCar.value = data.value;
-  }
-  if (pending.value) {
+  
+      // Effect Data
+  watchEffect(() =>{
+    if(data.value){
+      infoCar.value = data.value;
+    }
     isLoading.value = pending.value;
-  }
-  if (error.value) {
-    errorMessage.value = error.value.message;
-  }
-  onMounted(fetchDataCar);
+    errorMessage.value = error.value?.message || null;
+  })      
 
   return {
     infoCar,
