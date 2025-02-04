@@ -79,12 +79,12 @@ export const useCamera = () => {
     }
   };
 
+
   return {
     cameraImage,
     isLoading,
     errorMessage,
     startCamera,
     stopCamera,
-    servoStatus
   };
 };
