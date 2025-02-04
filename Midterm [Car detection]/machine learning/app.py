@@ -23,7 +23,7 @@ conn.execute(
     );"
 )
 conn.commit()
-
+ 
 # Arduino port connection
 try:
     arduino = serial.Serial("COM9", 9600, timeout=1)
@@ -84,7 +84,7 @@ def analyseImg():
 @app.route("/getAllDatas", methods=["GET"])
 def getAllData():
     cur = conn.cursor()
-    cur.execute("SELECT ID, Title, DetectTime FROM CarStatus")
+    cur.execute("SELECT ID, Title, DetectTime FROM CarStatus ORDER BY ID DESC LIMIT 5")
     fetchDatas = cur.fetchall()
 
     datas = [
