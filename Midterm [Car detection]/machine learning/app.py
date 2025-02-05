@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from datetime import datetime
 import base64, serial, sqlite3, os
+import serial.tools.list_ports
 
 app = Flask(__name__)
 CORS(app)
@@ -25,10 +26,15 @@ conn.execute(
 conn.commit()
  
 # Arduino port connection
-try:
-    arduino = serial.Serial("COM9", 9600, timeout=1)
-except Exception as e:
-    arduino = None
+def find_arduino():
+    ports = serial.tools.list_ports.comports()
+    for port in ports:
+        if "Arduino" in port.description or "USB Serial" in port.description:
+            return port.device
+    return None
+
+_port = find_arduino()
+arduino = serial.Serial(_port, 9600, timeout=1) if _port != None else None
 
 print(f"-> Arduino Port: {arduino}")
 
@@ -57,7 +63,6 @@ def storeDatas(title: str):
 def analyseImg():
     global object
 
-
     data = request.get_json()
 
     if "image" not in data:
@@ -68,6 +73,8 @@ def analyseImg():
     interactToServo(object[0] == "CarObject")
     if object[0] != "Nothing":
         storeDatas(object[0])
+
+    print(f"Object detected: {object[0]}")
 
     return (
         jsonify(
