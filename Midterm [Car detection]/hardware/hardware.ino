@@ -33,7 +33,5 @@ void loop() {
       digitalWrite(led_green, 0);
       digitalWrite(led_red, 1);
     }
-
-    delay(1000);
   }
 }

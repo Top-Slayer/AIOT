@@ -3,10 +3,11 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss'
   ],
   compatibilityDate: '2025-02-01',
-  ssr: true,
+  ssr: false,
+  target: 'static',
   nitro:{
     preset: 'static'
-  }
+  },
 });
 
 
